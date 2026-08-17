@@ -1,0 +1,12 @@
+require("dotenv").config();
+const express=require("express"),helmet=require("helmet"),rateLimit=require("express-rate-limit"),path=require("path");
+const app=express(),PORT=process.env.PORT||10000;
+app.use(helmet({contentSecurityPolicy:false})); app.use(express.json({limit:"20kb"})); app.use(express.static("public"));
+app.use("/api",rateLimit({windowMs:60000,max:30,standardHeaders:true,legacyHeaders:false}));
+app.get("/api/health",(_q,r)=>r.json({ok:true,service:"SwiftOTP"}));
+app.post("/api/otp/request",(q,r)=>{const phone=String((q.body||{}).phone||"");
+ if(!/^\+91\d{10}$/.test(phone)) return r.status(400).json({ok:false,error:"Use +91XXXXXXXXXX format."});
+ return r.status(501).json({ok:false,error:"SMS provider is not connected yet.",note:"Connect an approved transactional SMS/Verify provider for authorized verification."});
+});
+app.get("*",(_q,r)=>r.sendFile(path.join(__dirname,"public","index.html")));
+app.listen(PORT,()=>console.log("SwiftOTP on "+PORT));
