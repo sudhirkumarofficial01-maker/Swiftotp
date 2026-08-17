@@ -1,1 +1,45 @@
-<!doctype html><html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SwiftOTP</title><link rel="stylesheet" href="/style.css"></head><body><header><b>Swift<span>OTP</span></b><small>India • Verification</small></header><main><section class="hero"><p>SMS VERIFICATION PLATFORM</p><h1>Fast, secure OTP verification.</h1><div>Authorized transactional SMS verification starter.</div></section><section class="card"><h2>Request verification</h2><label>Indian mobile number</label><input id="phone" inputmode="tel" placeholder="+91XXXXXXXXXX" maxlength="13"><button id="send">Send OTP</button><p id="status"></p><small>Use only numbers you own or have permission to verify.</small></section></main><footer>SwiftOTP • Authorized verification only</footer><script src="/app.js"></script></body></html>
+<script type="text/javascript">
+var configuration = {
+  widgetId: "366871745777353932383132",
+  tokenAuth: "561651Te30wKlszYBR6a83721dP1",
+  exposeMethods: true,
+
+  success: (data) => {
+    console.log("OTP verification successful", data);
+  },
+
+  failure: (error) => {
+    console.log("OTP verification failed", error);
+  }
+};
+</script>
+
+<script type="text/javascript">
+(function loadOtpScript(urls) {
+  let i = 0;
+
+  function attempt() {
+    const s = document.createElement("script");
+    s.src = urls[i];
+    s.async = true;
+
+    s.onload = () => {
+      if (typeof window.initSendOTP === "function") {
+        window.initSendOTP(configuration);
+      }
+    };
+
+    s.onerror = () => {
+      i++;
+      if (i < urls.length) attempt();
+    };
+
+    document.head.appendChild(s);
+  }
+
+  attempt();
+})([
+  "https://verify.msg91.com/otp-provider.js",
+  "https://verify.phone91.com/otp-provider.js"
+]);
+</script>
