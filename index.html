@@ -1,171 +1,350 @@
 <!DOCTYPE html>
 <html lang="hi">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>SwiftOTP</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      color: #172033;
-    }
+<title>SwiftOTP</title>
 
-    header {
-      background: white;
-      padding: 20px 7%;
-      border-bottom: 1px solid #e5e7eb;
-    }
+<style>
 
-    .logo {
-      font-size: 30px;
-      font-weight: 800;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    .logo span {
-      color: #16a34a;
-    }
+body {
 
-    .hero {
-      text-align: center;
-      padding: 60px 20px 30px;
-    }
+  margin: 0;
 
-    .hero small {
-      color: #16a34a;
-      font-weight: bold;
-      letter-spacing: 3px;
-    }
+  font-family:
+    Arial,
+    sans-serif;
 
-    .hero h1 {
-      font-size: 48px;
-      line-height: 1.05;
-      margin: 18px 0;
-    }
+  background:
+    #f5f7fb;
 
-    .hero p {
-      color: #687386;
-      font-size: 19px;
-    }
+  color:
+    #172033;
 
-    .card {
-      max-width: 560px;
-      margin: 20px auto 60px;
-      background: white;
-      padding: 40px;
-      border-radius: 25px;
-      box-shadow: 0 15px 45px rgba(0,0,0,.08);
-    }
+}
 
-    .card h2 {
-      font-size: 30px;
-      margin-top: 0;
-    }
+header {
 
-    label {
-      display: block;
-      font-weight: bold;
-      margin: 25px 0 9px;
-    }
+  background:
+    white;
 
-    input {
-      width: 100%;
-      padding: 17px;
-      border: 1px solid #d1d5db;
-      border-radius: 13px;
-      font-size: 17px;
-      outline: none;
-    }
+  padding:
+    20px 7%;
 
-    input:focus {
-      border-color: #16a34a;
-    }
+  border-bottom:
+    1px solid #e5e7eb;
 
-    button {
-      width: 100%;
-      margin-top: 17px;
-      padding: 17px;
-      border: none;
-      border-radius: 13px;
-      background: #16a34a;
-      color: white;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+}
 
-    button:disabled {
-      opacity: .55;
-      cursor: not-allowed;
-    }
+.logo {
 
-    .secondary {
-      background: #374151;
-    }
+  font-size:
+    30px;
 
-    .hidden {
-      display: none !important;
-    }
+  font-weight:
+    800;
 
-    .message {
-      margin-top: 18px;
-      line-height: 1.5;
-      font-size: 15px;
-    }
+}
 
-    .success {
-      text-align: center;
-      padding: 20px 0;
-    }
+.logo span {
 
-    .success-icon {
-      font-size: 60px;
-    }
+  color:
+    #16a34a;
 
-    .note {
-      margin-top: 25px;
-      color: #6b7280;
-      font-size: 13px;
-      line-height: 1.6;
-    }
+}
 
-    footer {
-      text-align: center;
-      color: #9ca3af;
-      padding: 30px;
-    }
+.hero {
 
-    @media (max-width: 650px) {
-      .hero h1 {
-        font-size: 40px;
-      }
+  text-align:
+    center;
 
-      .card {
-        margin: 15px;
-        padding: 28px 22px;
-      }
-    }
-  </style>
+  padding:
+    60px 20px 30px;
+
+}
+
+.hero small {
+
+  color:
+    #16a34a;
+
+  font-weight:
+    bold;
+
+  letter-spacing:
+    3px;
+
+}
+
+.hero h1 {
+
+  font-size:
+    48px;
+
+  line-height:
+    1.05;
+
+  margin:
+    18px 0;
+
+}
+
+.hero p {
+
+  color:
+    #687386;
+
+  font-size:
+    19px;
+
+}
+
+.card {
+
+  max-width:
+    560px;
+
+  margin:
+    20px auto 60px;
+
+  background:
+    white;
+
+  padding:
+    40px;
+
+  border-radius:
+    25px;
+
+  box-shadow:
+    0 15px 45px
+    rgba(0,0,0,.08);
+
+}
+
+.card h2 {
+
+  font-size:
+    30px;
+
+  margin-top:
+    0;
+
+}
+
+label {
+
+  display:
+    block;
+
+  font-weight:
+    bold;
+
+  margin:
+    25px 0 9px;
+
+}
+
+input {
+
+  width:
+    100%;
+
+  padding:
+    17px;
+
+  border:
+    1px solid #d1d5db;
+
+  border-radius:
+    13px;
+
+  font-size:
+    17px;
+
+  outline:
+    none;
+
+}
+
+input:focus {
+
+  border-color:
+    #16a34a;
+
+}
+
+button {
+
+  width:
+    100%;
+
+  margin-top:
+    17px;
+
+  padding:
+    17px;
+
+  border:
+    none;
+
+  border-radius:
+    13px;
+
+  background:
+    #16a34a;
+
+  color:
+    white;
+
+  font-size:
+    17px;
+
+  font-weight:
+    bold;
+
+  cursor:
+    pointer;
+
+}
+
+button:disabled {
+
+  opacity:
+    .55;
+
+  cursor:
+    not-allowed;
+
+}
+
+.secondary {
+
+  background:
+    #374151;
+
+}
+
+.hidden {
+
+  display:
+    none !important;
+
+}
+
+.message {
+
+  margin-top:
+    18px;
+
+  line-height:
+    1.5;
+
+  font-size:
+    15px;
+
+}
+
+.success {
+
+  text-align:
+    center;
+
+  padding:
+    20px 0;
+
+}
+
+.success-icon {
+
+  font-size:
+    60px;
+
+}
+
+.note {
+
+  margin-top:
+    25px;
+
+  color:
+    #6b7280;
+
+  font-size:
+    13px;
+
+  line-height:
+    1.6;
+
+}
+
+footer {
+
+  text-align:
+    center;
+
+  color:
+    #9ca3af;
+
+  padding:
+    30px;
+
+}
+
+@media (max-width:650px) {
+
+  .hero h1 {
+
+    font-size:
+      40px;
+
+  }
+
+  .card {
+
+    margin:
+      15px;
+
+    padding:
+      28px 22px;
+
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
 <header>
+
   <div class="logo">
     Swift<span>OTP</span>
   </div>
+
 </header>
+
 
 <section class="hero">
 
-  <small>SMS VERIFICATION PLATFORM</small>
+  <small>
+    SMS VERIFICATION PLATFORM
+  </small>
 
   <h1>
     Fast, Secure OTP Verification
@@ -177,196 +356,203 @@
 
 </section>
 
+
 <div class="card">
 
-  <!-- MOBILE -->
 
-  <div id="mobileScreen">
+<!-- ==========================
+     MOBILE
+========================== -->
 
-    <h2>Request Verification</h2>
+<div id="mobileScreen">
 
-    <label>Indian Mobile Number</label>
+  <h2>
+    Request Verification
+  </h2>
 
-    <input
-      id="mobile"
-      type="tel"
-      inputmode="numeric"
-      maxlength="10"
-      placeholder="Enter 10 digit mobile number"
-    >
+  <label>
+    Indian Mobile Number
+  </label>
 
-    <button
-      id="sendButton"
-      type="button"
-      onclick="sendMyOTP()"
-    >
-      Send OTP
-    </button>
+  <input
+    id="mobile"
+    type="tel"
+    inputmode="numeric"
+    maxlength="10"
+    placeholder="Enter 10 digit mobile number"
+  >
 
-  </div>
-
-
-  <!-- OTP -->
-
-  <div id="otpScreen" class="hidden">
-
-    <h2>Verify OTP</h2>
-
-    <p>
-      OTP has been sent to your mobile number.
-    </p>
-
-    <label>Enter OTP</label>
-
-    <input
-      id="otp"
-      type="tel"
-      inputmode="numeric"
-      maxlength="6"
-      placeholder="Enter OTP"
-    >
-
-    <button
-      id="verifyButton"
-      type="button"
-      onclick="verifyMyOTP()"
-    >
-      Verify OTP
-    </button>
-
-    <button
-      id="resendButton"
-      class="secondary"
-      type="button"
-      onclick="resendMyOTP()"
-    >
-      Resend OTP
-    </button>
-
-    <button
-      class="secondary"
-      type="button"
-      onclick="changeNumber()"
-    >
-      Change Number
-    </button>
-
-  </div>
-
-
-  <!-- SUCCESS -->
-
-  <div id="successScreen" class="hidden success">
-
-    <div class="success-icon">
-      ✅
-    </div>
-
-    <h2>
-      Verification Successful
-    </h2>
-
-    <p>
-      Your mobile number has been verified successfully.
-    </p>
-
-  </div>
-
-
-  <div id="message" class="message"></div>
-
-  <div class="note">
-    Use only numbers you own or have permission to verify.
-  </div>
+  <button
+    id="sendButton"
+    type="button"
+    onclick="sendMyOTP()"
+  >
+    Send OTP
+  </button>
 
 </div>
 
+
+<!-- ==========================
+     OTP
+========================== -->
+
+<div
+  id="otpScreen"
+  class="hidden"
+>
+
+  <h2>
+    Verify OTP
+  </h2>
+
+  <p>
+    OTP has been sent to your mobile number.
+  </p>
+
+  <label>
+    Enter OTP
+  </label>
+
+  <input
+    id="otp"
+    type="tel"
+    inputmode="numeric"
+    maxlength="6"
+    placeholder="Enter OTP"
+  >
+
+  <button
+    id="verifyButton"
+    type="button"
+    onclick="verifyMyOTP()"
+  >
+    Verify OTP
+  </button>
+
+  <button
+    id="resendButton"
+    class="secondary"
+    type="button"
+    onclick="resendMyOTP()"
+  >
+    Resend OTP
+  </button>
+
+  <button
+    class="secondary"
+    type="button"
+    onclick="changeNumber()"
+  >
+    Change Number
+  </button>
+
+</div>
+
+
+<!-- ==========================
+     SUCCESS
+========================== -->
+
+<div
+  id="successScreen"
+  class="hidden success"
+>
+
+  <div class="success-icon">
+    ✅
+  </div>
+
+  <h2>
+    Verification Successful
+  </h2>
+
+  <p>
+    Your mobile number has been verified successfully.
+  </p>
+
+</div>
+
+
+<div
+  id="message"
+  class="message"
+></div>
+
+
+<div class="note">
+
+  Use only numbers you own or have permission to verify.
+
+</div>
+
+
+</div>
+
+
 <footer>
+
   SwiftOTP • Authorized verification only
+
 </footer>
 
 
-<script>
+<!-- =====================================
+     MSG91 OTP WIDGET
+===================================== -->
 
-/* ==========================================
-   MSG91 CONFIGURATION
-   ========================================== */
+<script>
 
 var configuration = {
 
-  widgetId: "366871745777353932383132",
+  widgetId:
+    "366871745777353932383132",
 
-  tokenAuth: "561651TrwVu82eN76a8379b5P1",
+  tokenAuth:
+    "561651TrwVu82eN76a8379b5P1",
 
-  exposeMethods: true,
+  exposeMethods:
+    true,
 
-  captchaRenderId: "",
+  captchaRenderId:
+    "",
 
-  success: async function(data) {
-  console.log("MSG91 success:", data);
+  success:
+    function(data) {
 
-  const accessToken =
-    data?.accessToken ||
-    data?.access_token ||
-    data?.token;
-
-  if (!accessToken) {
-    showMessage("Verification successful, but access token नहीं मिला.");
-    return;
-  }
-
-  try {
-    const response = await fetch("/api/auth/verify", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        accessToken: accessToken
-      })
-    });
-
-    const result = await response.json();
-
-    if (!response.ok || !result.ok) {
-      showMessage(
-        result.error || "Login verification failed."
+      console.log(
+        "MSG91 SUCCESS:",
+        data
       );
-      return;
+
+    },
+
+  failure:
+    function(error) {
+
+      console.log(
+        "MSG91 FAILURE:",
+        error
+      );
+
     }
-
-    sessionStorage.setItem(
-      "swiftotp_session",
-      result.sessionId
-    );
-
-    window.location.href = "/dashboard.html";
-
-  } catch (error) {
-    console.error(error);
-    showMessage("Login server से connection नहीं हुआ.");
-  }
-  },
-
-  failure: function(error) {
-    console.log("MSG91 failure:", error);
-  }
 
 };
 
 
-/* ==========================================
-   VARIABLES
-   ========================================== */
+var otpReady =
+  false;
 
-var otpReady = false;
-var currentIdentifier = "";
-var currentReqId = "";
+var currentIdentifier =
+  "";
+
+var currentReqId =
+  "";
 
 
-/* ==========================================
-   LOAD MSG91 SDK
-   ========================================== */
+/* =====================================
+   LOAD MSG91
+===================================== */
 
 (function loadOtpScript(urls) {
 
@@ -374,163 +560,248 @@ var currentReqId = "";
 
   function attempt() {
 
-    var script = document.createElement("script");
+    var script =
+      document.createElement(
+        "script"
+      );
 
-    script.src = urls[i];
-    script.async = true;
+    script.src =
+      urls[i];
 
-    script.onload = function() {
+    script.async =
+      true;
 
-      console.log("MSG91 SDK loaded");
 
-      if (
-        typeof window.initSendOTP === "function"
-      ) {
+    script.onload =
+      function() {
 
-        window.initSendOTP(configuration);
-
-        otpReady = true;
-
-        console.log("MSG91 OTP ready");
-
-      } else {
-
-        showMessage(
-          "OTP service initialize nahi hui."
+        console.log(
+          "MSG91 SDK loaded"
         );
 
-      }
 
-    };
+        if (
+          typeof window.initSendOTP ===
+          "function"
+        ) {
 
-    script.onerror = function() {
+          window.initSendOTP(
+            configuration
+          );
 
-      i++;
+          otpReady =
+            true;
 
-      if (i < urls.length) {
+          console.log(
+            "MSG91 OTP ready"
+          );
 
-        attempt();
+        }
 
-      } else {
+      };
 
-        showMessage(
-          "OTP service load nahi hui."
-        );
 
-      }
+    script.onerror =
+      function() {
 
-    };
+        i++;
 
-    document.head.appendChild(script);
+        if (
+          i < urls.length
+        ) {
+
+          attempt();
+
+        } else {
+
+          showMessage(
+            "OTP service load nahi hui."
+          );
+
+        }
+
+      };
+
+
+    document.head.appendChild(
+      script
+    );
+
   }
+
 
   attempt();
 
 })([
+
   "https://verify.msg91.com/otp-provider.js",
+
   "https://verify.phone91.com/otp-provider.js"
+
 ]);
 
 
-/* ==========================================
+/* =====================================
    MESSAGE
-   ========================================== */
+===================================== */
 
 function showMessage(text) {
 
-  document.getElementById("message").innerText = text;
+  document.getElementById(
+    "message"
+  ).innerText =
+    text;
 
 }
 
 
-/* ==========================================
+/* =====================================
    SEND OTP
-   ========================================== */
+===================================== */
 
 function sendMyOTP() {
 
   var mobile =
-    document.getElementById("mobile").value.trim();
+    document
+      .getElementById(
+        "mobile"
+      )
+      .value
+      .trim();
 
 
-  if (!/^[6-9][0-9]{9}$/.test(mobile)) {
+  if (
+    !/^[6-9][0-9]{9}$/.test(
+      mobile
+    )
+  ) {
 
     showMessage(
-      "Please enter a valid 10 digit Indian mobile number."
+      "Please valid 10 digit Indian mobile number enter karein."
     );
 
     return;
+
   }
 
 
   if (
-    typeof window.sendOtp !== "function"
+    typeof window.sendOtp !==
+    "function"
   ) {
 
     showMessage(
-      "OTP service abhi ready nahi hai. Page reload karke try karein."
+      "OTP service ready nahi hai. Page reload karein."
     );
 
     return;
+
   }
 
 
-  currentIdentifier = "91" + mobile;
+  currentIdentifier =
+    "91" + mobile;
 
 
   var button =
-    document.getElementById("sendButton");
+    document.getElementById(
+      "sendButton"
+    );
 
-  button.disabled = true;
-  button.innerText = "Sending OTP...";
 
-  showMessage("OTP bheja ja raha hai...");
+  button.disabled =
+    true;
+
+  button.innerText =
+    "Sending OTP...";
+
+
+  showMessage(
+    "OTP bheja ja raha hai..."
+  );
 
 
   window.sendOtp(
 
     currentIdentifier,
 
+
     function(data) {
 
-      console.log("OTP SENT:", data);
+      console.log(
+        "OTP SENT:",
+        data
+      );
+
 
       /*
-       * MSG91 response me reqId mil sakta hai.
-       * Retry ke liye ise save kar rahe hain.
+       * MSG91 Send OTP response
+       * se reqId save karna zaroori hai.
        */
 
-      if (data && data.reqId) {
-        currentReqId = data.reqId;
+      if (
+        data &&
+        data.reqId
+      ) {
+
+        currentReqId =
+          data.reqId;
+
       }
 
-      document
-        .getElementById("mobileScreen")
-        .classList.add("hidden");
 
       document
-        .getElementById("otpScreen")
-        .classList.remove("hidden");
+        .getElementById(
+          "mobileScreen"
+        )
+        .classList
+        .add(
+          "hidden"
+        );
+
+
+      document
+        .getElementById(
+          "otpScreen"
+        )
+        .classList
+        .remove(
+          "hidden"
+        );
+
 
       showMessage(
         "OTP bhej diya gaya hai."
       );
 
-      button.disabled = false;
-      button.innerText = "Send OTP";
+
+      button.disabled =
+        false;
+
+      button.innerText =
+        "Send OTP";
 
     },
 
+
     function(error) {
 
-      console.log("OTP SEND ERROR:", error);
-
-      showMessage(
-        "OTP bhejne me problem hui. Dobara try karein."
+      console.error(
+        "SEND OTP ERROR:",
+        error
       );
 
-      button.disabled = false;
-      button.innerText = "Send OTP";
+
+      showMessage(
+        "OTP bhejne mein problem hui."
+      );
+
+
+      button.disabled =
+        false;
+
+      button.innerText =
+        "Send OTP";
 
     }
 
@@ -539,28 +810,39 @@ function sendMyOTP() {
 }
 
 
-/* ==========================================
+/* =====================================
    VERIFY OTP
-   ========================================== */
+===================================== */
 
 function verifyMyOTP() {
 
   var otp =
-    document.getElementById("otp").value.trim();
+    document
+      .getElementById(
+        "otp"
+      )
+      .value
+      .trim();
 
 
-  if (!/^[0-9]{4,6}$/.test(otp)) {
+  if (
+    !/^[0-9]{4,6}$/.test(
+      otp
+    )
+  ) {
 
     showMessage(
-      "Please valid OTP enter karein."
+      "Valid OTP enter karein."
     );
 
     return;
+
   }
 
 
   if (
-    typeof window.verifyOtp !== "function"
+    typeof window.verifyOtp !==
+    "function"
   ) {
 
     showMessage(
@@ -568,95 +850,272 @@ function verifyMyOTP() {
     );
 
     return;
+
   }
 
 
   var button =
-    document.getElementById("verifyButton");
+    document.getElementById(
+      "verifyButton"
+    );
 
-  button.disabled = true;
-  button.innerText = "Verifying...";
+
+  button.disabled =
+    true;
+
+  button.innerText =
+    "Verifying...";
+
 
   showMessage(
     "OTP verify kiya ja raha hai..."
   );
 
 
+  /*
+   * IMPORTANT:
+   *
+   * MSG91 docs ke according
+   * reqId verify ke liye use hota hai.
+   */
+
   window.verifyOtp(
 
     otp,
 
-    function(data) {
+
+    async function(data) {
 
       console.log(
-        "OTP VERIFIED:",
+        "MSG91 VERIFY RESPONSE:",
         data
       );
 
 
       /*
-       * MSG91 verification ke baad
-       * access token response me aa sakta hai.
+       * Different SDK responses ko handle
+       * karne ke liye multiple possible
+       * property names check kar rahe hain.
        */
 
-      if (data) {
+      var accessToken = null;
 
-        console.log(
-          "MSG91 verification response received."
-        );
+
+      if (
+        typeof data ===
+        "string"
+      ) {
+
+        accessToken =
+          data;
 
       }
 
 
-      document
-        .getElementById("otpScreen")
-        .classList.add("hidden");
+      if (
+        data &&
+        typeof data ===
+        "object"
+      ) {
 
-      document
-        .getElementById("successScreen")
-        .classList.remove("hidden");
+        accessToken =
+          data.accessToken ||
+          data.access_token ||
+          data["access-token"] ||
+          data.token ||
+          data.jwt ||
+          data.jwtToken ||
+          data.data?.accessToken ||
+          data.data?.access_token ||
+          data.data?.token;
+
+      }
+
+
+      /*
+       * Token nahi mila to
+       * raw response console mein rahega.
+       */
+
+      if (!accessToken) {
+
+        console.error(
+          "No access token in MSG91 response:",
+          data
+        );
+
+
+        showMessage(
+          "OTP verify hua, lekin MSG91 access token nahi mila. Console check karein."
+        );
+
+
+        button.disabled =
+          false;
+
+        button.innerText =
+          "Verify OTP";
+
+        return;
+
+      }
 
 
       showMessage(
-        "Mobile number successfully verified."
+        "Verification successful. Login banaya ja raha hai..."
       );
 
-      button.disabled = false;
-      button.innerText = "Verify OTP";
+
+      /*
+       * Token server ko bhejenge.
+       */
+
+      try {
+
+        var response =
+          await fetch(
+            "/api/auth/verify",
+            {
+
+              method:
+                "POST",
+
+              headers: {
+
+                "Content-Type":
+                  "application/json"
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  accessToken:
+                    accessToken,
+
+                  mobile:
+                    currentIdentifier
+
+                })
+
+            }
+          );
+
+
+        var result =
+          await response.json();
+
+
+        console.log(
+          "SERVER LOGIN RESPONSE:",
+          result
+        );
+
+
+        if (
+          !response.ok ||
+          !result.ok
+        ) {
+
+          showMessage(
+            result.error ||
+            "Server verification failed."
+          );
+
+
+          button.disabled =
+            false;
+
+          button.innerText =
+            "Verify OTP";
+
+          return;
+
+        }
+
+
+        /*
+         * Application session save.
+         */
+
+        sessionStorage.setItem(
+          "swiftotp_session",
+          result.sessionId
+        );
+
+
+        /*
+         * Dashboard open.
+         */
+
+        window.location.href =
+          "/dashboard.html";
+
+      }
+
+      catch(error) {
+
+        console.error(
+          "SERVER ERROR:",
+          error
+        );
+
+
+        showMessage(
+          "Login server se connection nahi hua."
+        );
+
+
+        button.disabled =
+          false;
+
+        button.innerText =
+          "Verify OTP";
+
+      }
 
     },
+
 
     function(error) {
 
-      console.log(
-        "OTP VERIFY ERROR:",
+      console.error(
+        "VERIFY OTP ERROR:",
         error
       );
 
+
       showMessage(
-        "Galat ya expired OTP. Dobara try karein."
+        "Galat ya expired OTP."
       );
 
-      button.disabled = false;
-      button.innerText = "Verify OTP";
+
+      button.disabled =
+        false;
+
+      button.innerText =
+        "Verify OTP";
 
     },
 
-    currentReqId || undefined
+
+    currentReqId ||
+    undefined
 
   );
 
 }
 
 
-/* ==========================================
+/* =====================================
    RESEND OTP
-   ========================================== */
+===================================== */
 
 function resendMyOTP() {
 
   if (
-    typeof window.retryOtp !== "function"
+    typeof window.retryOtp !==
+    "function"
   ) {
 
     showMessage(
@@ -664,23 +1123,36 @@ function resendMyOTP() {
     );
 
     return;
+
   }
 
 
   var button =
-    document.getElementById("resendButton");
+    document.getElementById(
+      "resendButton"
+    );
 
-  button.disabled = true;
-  button.innerText = "Sending...";
+
+  button.disabled =
+    true;
+
+  button.innerText =
+    "Sending...";
+
 
   showMessage(
     "OTP dobara bheja ja raha hai..."
   );
 
 
+  /*
+   * SMS channel = 11
+   */
+
   window.retryOtp(
 
-    null,
+    "11",
+
 
     function(data) {
 
@@ -689,72 +1161,121 @@ function resendMyOTP() {
         data
       );
 
-      if (data && data.reqId) {
-        currentReqId = data.reqId;
+
+      if (
+        data &&
+        data.reqId
+      ) {
+
+        currentReqId =
+          data.reqId;
+
       }
+
 
       showMessage(
         "Naya OTP bhej diya gaya hai."
       );
 
-      button.disabled = false;
-      button.innerText = "Resend OTP";
+
+      button.disabled =
+        false;
+
+      button.innerText =
+        "Resend OTP";
 
     },
 
+
     function(error) {
 
-      console.log(
+      console.error(
         "RESEND ERROR:",
         error
       );
+
 
       showMessage(
         "OTP resend nahi ho saka."
       );
 
-      button.disabled = false;
-      button.innerText = "Resend OTP";
+
+      button.disabled =
+        false;
+
+      button.innerText =
+        "Resend OTP";
 
     },
 
-    currentReqId || undefined
+
+    currentReqId ||
+    undefined
 
   );
 
 }
 
 
-/* ==========================================
+/* =====================================
    CHANGE NUMBER
-   ========================================== */
+===================================== */
 
 function changeNumber() {
 
   document
-    .getElementById("otpScreen")
-    .classList.add("hidden");
+    .getElementById(
+      "otpScreen"
+    )
+    .classList
+    .add(
+      "hidden"
+    );
+
 
   document
-    .getElementById("successScreen")
-    .classList.add("hidden");
+    .getElementById(
+      "successScreen"
+    )
+    .classList
+    .add(
+      "hidden"
+    );
+
 
   document
-    .getElementById("mobileScreen")
-    .classList.remove("hidden");
+    .getElementById(
+      "mobileScreen"
+    )
+    .classList
+    .remove(
+      "hidden"
+    );
+
 
   document
-    .getElementById("otp")
-    .value = "";
+    .getElementById(
+      "otp"
+    )
+    .value =
+    "";
 
-  currentIdentifier = "";
-  currentReqId = "";
 
-  showMessage("");
+  currentIdentifier =
+    "";
+
+  currentReqId =
+    "";
+
+
+  showMessage(
+    ""
+  );
 
 }
 
 </script>
 
 </body>
-  </html>
+
+</html>
