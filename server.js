@@ -9,9 +9,23 @@ const crypto = require("crypto");
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-app.use(helmet({ contentSecurityPolicy: false }));
+/* =========================
+   BASIC SECURITY
+========================= */
+
+app.use(
+  helmet({
+    contentSecurityPolicy: false
+  })
+);
+
 app.use(express.json({ limit: "20kb" }));
+
 app.use(express.static(__dirname));
+
+/* =========================
+   API RATE LIMIT
+========================= */
 
 app.use(
   "/api",
@@ -23,40 +37,56 @@ app.use(
   })
 );
 
-/* ---------- Session helpers ---------- */
+/* =========================
+   SESSION STORAGE
+========================= */
 
 const sessions = new Map();
 
 function createSession(user) {
-  const id = crypto.randomBytes(32).toString("hex");
+  const sessionId = crypto
+    .randomBytes(32)
+    .toString("hex");
 
-  sessions.set(id, {
+  sessions.set(sessionId, {
     ...user,
     createdAt: Date.now()
   });
 
-  return id;
+  return sessionId;
 }
 
 function getSession(req) {
-  const id = req.headers["x-session-id"];
+  const sessionId =
+    req.headers["x-session-id"];
 
-  if (!id) return null;
+  if (!sessionId) {
+    return null;
+  }
 
-  const session = sessions.get(id);
+  const session =
+    sessions.get(sessionId);
 
-  if (!session) return null;
+  if (!session) {
+    return null;
+  }
 
-  // 24 hour session
-  if (Date.now() - session.createdAt > 86400000) {
-    sessions.delete(id);
+  /* 24 hour session */
+
+  if (
+    Date.now() - session.createdAt >
+    24 * 60 * 60 * 1000
+  ) {
+    sessions.delete(sessionId);
     return null;
   }
 
   return session;
 }
 
-/* ---------- Health ---------- */
+/* =========================
+   HEALTH CHECK
+========================= */
 
 app.get("/api/health", (_req, res) => {
   res.json({
@@ -65,125 +95,301 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-/* ---------- MSG91 access-token verification ---------- */
+/* =========================
+   VERIFY MSG91 ACCESS TOKEN
+========================= */
 
-app.post("/api/auth/verify", async (req, res) => {
-  try {
-    const accessToken = String(req.body?.accessToken || "");
+app.post(
+  "/api/auth/verify",
+  async (req, res) => {
 
-    if (!accessToken) {
-      return res.status(400).json({
-        ok: false,
-        error: "Missing access token."
-      });
-    }
+    try {
 
-    if (!process.env.MSG91_AUTHKEY) {
-      return res.status(500).json({
-        ok: false,
-        error: "MSG91_AUTHKEY is not configured."
-      });
-    }
+      const accessToken =
+        String(
+          req.body?.accessToken || ""
+        ).trim();
 
-    const response = await fetch(
-      "https://control.msg91.com/api/v5/widget/verifyAccessToken",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: new URLSearchParams({
-          authkey: process.env.MSG91_AUTHKEY,
-          "access-token": accessToken
-        })
+
+      if (!accessToken) {
+
+        return res.status(400).json({
+          ok: false,
+          error:
+            "Missing MSG91 access token."
+        });
+
       }
-    );
 
-    const data = await response.json();
 
-    if (!response.ok) {
-      return res.status(401).json({
-        ok: false,
-        error: "MSG91 token verification failed."
+      const authKey =
+        process.env.MSG91_AUTHKEY;
+
+
+      if (!authKey) {
+
+        console.error(
+          "MSG91_AUTHKEY missing"
+        );
+
+        return res.status(500).json({
+          ok: false,
+          error:
+            "MSG91_AUTHKEY is not configured on server."
+        });
+
+      }
+
+
+      /*
+       * MSG91 access-token verification
+       */
+
+      const response =
+        await fetch(
+          "https://control.msg91.com/api/v5/widget/verifyAccessToken",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/x-www-form-urlencoded",
+              "authkey":
+                authKey
+            },
+
+            body:
+              new URLSearchParams({
+                "access-token":
+                  accessToken
+              })
+          }
+        );
+
+
+      const data =
+        await response.json()
+          .catch(() => ({}));
+
+
+      console.log(
+        "MSG91 token response:",
+        response.status
+      );
+
+
+      if (!response.ok) {
+
+        return res.status(401).json({
+          ok: false,
+          error:
+            "MSG91 access token verification failed."
+        });
+
+      }
+
+
+      /*
+       * Create our own application session
+       */
+
+      const user = {
+
+        verified: true,
+
+        provider: "MSG91",
+
+        verifiedAt:
+          new Date().toISOString(),
+
+        msg91: data
+
+      };
+
+
+      const sessionId =
+        createSession(user);
+
+
+      return res.json({
+
+        ok: true,
+
+        sessionId,
+
+        user: {
+
+          verified: true,
+
+          provider: "MSG91",
+
+          verifiedAt:
+            user.verifiedAt
+
+        }
+
       });
+
     }
 
-    /*
-      MSG91 response structure can vary.
-      Keep the verified response server-side.
-    */
+    catch (error) {
 
-    const user = {
-      verified: true,
-      provider: "MSG91",
-      verifiedAt: new Date().toISOString(),
-      data
-    };
+      console.error(
+        "MSG91 verification error:",
+        error
+      );
 
-    const sessionId = createSession(user);
+      return res.status(500).json({
+
+        ok: false,
+
+        error:
+          "Authentication service error."
+
+      });
+
+    }
+
+  }
+);
+
+/* =========================
+   CURRENT USER
+========================= */
+
+app.get(
+  "/api/me",
+  (req, res) => {
+
+    const session =
+      getSession(req);
+
+
+    if (!session) {
+
+      return res.status(401).json({
+
+        ok: false,
+
+        error:
+          "Not authenticated."
+
+      });
+
+    }
+
 
     return res.json({
+
       ok: true,
-      sessionId,
+
       user: {
-        verified: true,
-        provider: "MSG91",
-        verifiedAt: user.verifiedAt
+
+        verified:
+          session.verified,
+
+        provider:
+          session.provider,
+
+        verifiedAt:
+          session.verifiedAt
+
       }
+
     });
 
-  } catch (error) {
-    console.error("MSG91 verification error:", error);
-
-    return res.status(500).json({
-      ok: false,
-      error: "Authentication service error."
-    });
   }
-});
+);
 
-/* ---------- Current user ---------- */
+/* =========================
+   LOGOUT
+========================= */
 
-app.get("/api/me", (req, res) => {
-  const session = getSession(req);
+app.post(
+  "/api/logout",
+  (req, res) => {
 
-  if (!session) {
-    return res.status(401).json({
-      ok: false,
-      error: "Not authenticated."
-    });
-  }
+    const sessionId =
+      req.headers["x-session-id"];
 
-  res.json({
-    ok: true,
-    user: {
-      verified: session.verified,
-      provider: session.provider,
-      verifiedAt: session.verifiedAt
+
+    if (sessionId) {
+
+      sessions.delete(
+        sessionId
+      );
+
     }
-  });
-});
 
-/* ---------- Logout ---------- */
 
-app.post("/api/logout", (req, res) => {
-  const id = req.headers["x-session-id"];
+    return res.json({
 
-  if (id) {
-    sessions.delete(id);
+      ok: true
+
+    });
+
   }
+);
 
-  res.json({
-    ok: true
-  });
-});
+/* =========================
+   DASHBOARD PAGE
+========================= */
 
-/* ---------- Website ---------- */
+app.get(
+  "/dashboard.html",
+  (req, res) => {
 
-app.get(/.*/, (_req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
+    const session =
+      getSession(req);
 
-app.listen(PORT, () => {
-  console.log(`SwiftOTP running on port ${PORT}`);
-});
+
+    /*
+     * Browser normally sends session
+     * through JavaScript, so dashboard
+     * itself is allowed to load.
+     *
+     * dashboard.js will call /api/me.
+     */
+
+    res.sendFile(
+      path.join(
+        __dirname,
+        "dashboard.html"
+      )
+    );
+
+  }
+);
+
+/* =========================
+   WEBSITE
+========================= */
+
+app.get(
+  /.*/,
+  (_req, res) => {
+
+    res.sendFile(
+      path.join(
+        __dirname,
+        "index.html"
+      )
+    );
+
+  }
+);
+
+/* =========================
+   START SERVER
+========================= */
+
+app.listen(
+  PORT,
+  () => {
+
+    console.log(
+      `SwiftOTP running on port ${PORT}`
+    );
+
+  }
+);
