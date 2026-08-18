@@ -7,11 +7,12 @@ const path = require("path");
 const crypto = require("crypto");
 
 const app = express();
+
 const PORT = process.env.PORT || 10000;
 
-/* =========================
-   BASIC SECURITY
-========================= */
+/* ================================
+   SECURITY
+================================ */
 
 app.use(
   helmet({
@@ -19,13 +20,18 @@ app.use(
   })
 );
 
-app.use(express.json({ limit: "20kb" }));
+app.use(
+  express.json({
+    limit: "20kb"
+  })
+);
 
 app.use(express.static(__dirname));
 
-/* =========================
+
+/* ================================
    API RATE LIMIT
-========================= */
+================================ */
 
 app.use(
   "/api",
@@ -37,16 +43,17 @@ app.use(
   })
 );
 
-/* =========================
+
+/* ================================
    SESSION STORAGE
-========================= */
+================================ */
 
 const sessions = new Map();
 
 function createSession(user) {
-  const sessionId = crypto
-    .randomBytes(32)
-    .toString("hex");
+
+  const sessionId =
+    crypto.randomBytes(32).toString("hex");
 
   sessions.set(sessionId, {
     ...user,
@@ -56,7 +63,9 @@ function createSession(user) {
   return sessionId;
 }
 
+
 function getSession(req) {
+
   const sessionId =
     req.headers["x-session-id"];
 
@@ -77,27 +86,36 @@ function getSession(req) {
     Date.now() - session.createdAt >
     24 * 60 * 60 * 1000
   ) {
+
     sessions.delete(sessionId);
+
     return null;
   }
 
   return session;
 }
 
-/* =========================
-   HEALTH CHECK
-========================= */
 
-app.get("/api/health", (_req, res) => {
-  res.json({
-    ok: true,
-    service: "SwiftOTP"
-  });
-});
+/* ================================
+   HEALTH
+================================ */
 
-/* =========================
-   VERIFY MSG91 ACCESS TOKEN
-========================= */
+app.get(
+  "/api/health",
+  (_req, res) => {
+
+    res.json({
+      ok: true,
+      service: "SwiftOTP"
+    });
+
+  }
+);
+
+
+/* ================================
+   MSG91 ACCESS TOKEN VERIFY
+================================ */
 
 app.post(
   "/api/auth/verify",
@@ -116,7 +134,7 @@ app.post(
         return res.status(400).json({
           ok: false,
           error:
-            "Missing MSG91 access token."
+            "Access token missing."
         });
 
       }
@@ -135,14 +153,14 @@ app.post(
         return res.status(500).json({
           ok: false,
           error:
-            "MSG91_AUTHKEY is not configured on server."
+            "MSG91_AUTHKEY is not configured."
         });
 
       }
 
 
       /*
-       * MSG91 access-token verification
+       * MSG91 Access Token Verification
        */
 
       const response =
@@ -153,16 +171,16 @@ app.post(
 
             headers: {
               "Content-Type":
-                "application/x-www-form-urlencoded",
+                "application/json",
+
               "authkey":
                 authKey
             },
 
-            body:
-              new URLSearchParams({
-                "access-token":
-                  accessToken
-              })
+            body: JSON.stringify({
+              "access-token":
+                accessToken
+            })
           }
         );
 
@@ -173,24 +191,32 @@ app.post(
 
 
       console.log(
-        "MSG91 token response:",
+        "MSG91 verify status:",
         response.status
       );
 
 
       if (!response.ok) {
 
+        console.error(
+          "MSG91 verify response:",
+          data
+        );
+
         return res.status(401).json({
+
           ok: false,
+
           error:
             "MSG91 access token verification failed."
+
         });
 
       }
 
 
       /*
-       * Create our own application session
+       * Create application session
        */
 
       const user = {
@@ -235,7 +261,7 @@ app.post(
     catch (error) {
 
       console.error(
-        "MSG91 verification error:",
+        "Authentication error:",
         error
       );
 
@@ -253,9 +279,10 @@ app.post(
   }
 );
 
-/* =========================
+
+/* ================================
    CURRENT USER
-========================= */
+================================ */
 
 app.get(
   "/api/me",
@@ -301,9 +328,10 @@ app.get(
   }
 );
 
-/* =========================
+
+/* ================================
    LOGOUT
-========================= */
+================================ */
 
 app.post(
   "/api/logout",
@@ -323,33 +351,20 @@ app.post(
 
 
     return res.json({
-
       ok: true
-
     });
 
   }
 );
 
-/* =========================
-   DASHBOARD PAGE
-========================= */
+
+/* ================================
+   DASHBOARD
+================================ */
 
 app.get(
   "/dashboard.html",
-  (req, res) => {
-
-    const session =
-      getSession(req);
-
-
-    /*
-     * Browser normally sends session
-     * through JavaScript, so dashboard
-     * itself is allowed to load.
-     *
-     * dashboard.js will call /api/me.
-     */
+  (_req, res) => {
 
     res.sendFile(
       path.join(
@@ -361,9 +376,10 @@ app.get(
   }
 );
 
-/* =========================
+
+/* ================================
    WEBSITE
-========================= */
+================================ */
 
 app.get(
   /.*/,
@@ -379,9 +395,10 @@ app.get(
   }
 );
 
-/* =========================
-   START SERVER
-========================= */
+
+/* ================================
+   START
+================================ */
 
 app.listen(
   PORT,
