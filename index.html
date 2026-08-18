@@ -302,8 +302,50 @@ var configuration = {
 
   captchaRenderId: "",
 
-  success: function(data) {
-    console.log("MSG91 success:", data);
+  success: async function(data) {
+  console.log("MSG91 success:", data);
+
+  const accessToken =
+    data?.accessToken ||
+    data?.access_token ||
+    data?.token;
+
+  if (!accessToken) {
+    showMessage("Verification successful, but access token नहीं मिला.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/auth/verify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        accessToken: accessToken
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.ok) {
+      showMessage(
+        result.error || "Login verification failed."
+      );
+      return;
+    }
+
+    sessionStorage.setItem(
+      "swiftotp_session",
+      result.sessionId
+    );
+
+    window.location.href = "/dashboard.html";
+
+  } catch (error) {
+    console.error(error);
+    showMessage("Login server से connection नहीं हुआ.");
+  }
   },
 
   failure: function(error) {
