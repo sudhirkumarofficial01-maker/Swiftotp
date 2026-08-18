@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiftOTP Dashboard</title>
+
+<style>
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f5f7fb;
+  color:#172033;
+}
+
+header {
+  background:white;
+  padding:20px 7%;
+  border-bottom:1px solid #e5e7eb;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo {
+  font-size:28px;
+  font-weight:800;
+}
+
+.logo span {
+  color:#16a34a;
+}
+
+button {
+  border:0;
+  background:#dc2626;
+  color:white;
+  padding:12px 20px;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+main {
+  max-width:900px;
+  margin:50px auto;
+  padding:20px;
+}
+
+.card {
+  background:white;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 10px 35px rgba(0,0,0,.07);
+}
+
+.verified {
+  color:#16a34a;
+  font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    Swift<span>OTP</span>
+  </div>
+
+  <button onclick="logout()">
+    Logout
+  </button>
+</header>
+
+<main>
+
+<div class="card">
+
+  <h1>
+    Welcome to SwiftOTP 👋
+  </h1>
+
+  <p class="verified">
+    ✅ Mobile Verified
+  </p>
+
+  <p id="details">
+    Loading account...
+  </p>
+
+</div>
+
+</main>
+
+<script>
+
+async function loadDashboard() {
+
+  const session =
+    sessionStorage.getItem(
+      "swiftotp_session"
+    );
+
+  if (!session) {
+    window.location.href = "/";
+    return;
+  }
+
+  try {
+
+    const response =
+      await fetch("/api/me", {
+        headers: {
+          "x-session-id": session
+        }
+      });
+
+    if (!response.ok) {
+      sessionStorage.removeItem(
+        "swiftotp_session"
+      );
+
+      window.location.href = "/";
+      return;
+    }
+
+    const data =
+      await response.json();
+
+    document.getElementById(
+      "details"
+    ).innerText =
+      "Account verified successfully via MSG91.";
+
+  } catch {
+
+    document.getElementById(
+      "details"
+    ).innerText =
+      "Unable to load account.";
+
+  }
+}
+
+
+async function logout() {
+
+  const session =
+    sessionStorage.getItem(
+      "swiftotp_session"
+    );
+
+  if (session) {
+
+    await fetch("/api/logout", {
+      method:"POST",
+      headers:{
+        "x-session-id":session
+      }
+    });
+
+  }
+
+  sessionStorage.removeItem(
+    "swiftotp_session"
+  );
+
+  window.location.href = "/";
+
+}
+
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>
