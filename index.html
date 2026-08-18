@@ -1,229 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SwiftOTP - OTP Verification</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      color: #172033;
-    }
-
-    header {
-      background: white;
-      padding: 20px;
-      border-bottom: 1px solid #ddd;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .logo span {
-      color: #16a34a;
-    }
-
-    .badge {
-      background: #e9fff3;
-      color: #16834a;
-      padding: 10px 16px;
-      border-radius: 20px;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 70px 20px 40px;
-    }
-
-    .hero small {
-      color: #159447;
-      font-weight: bold;
-      letter-spacing: 3px;
-    }
-
-    h1 {
-      font-size: 48px;
-      margin: 15px 0;
-    }
-
-    .hero p {
-      color: #687386;
-      font-size: 20px;
-    }
-
-    .card {
-      max-width: 600px;
-      margin: 20px auto 80px;
-      background: white;
-      padding: 45px;
-      border-radius: 25px;
-      box-shadow: 0 10px 35px rgba(0,0,0,.08);
-    }
-
-    .card h2 {
-      font-size: 30px;
-      margin-top: 0;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin: 25px 0 10px;
-    }
-
-    input {
-      width: 100%;
-      padding: 18px;
-      border: 1px solid #ccc;
-      border-radius: 14px;
-      font-size: 18px;
-      outline: none;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 18px;
-      border: 0;
-      border-radius: 14px;
-      background: #16a34a;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:active {
-      transform: scale(.99);
-    }
-
-    .note {
-      margin-top: 30px;
-      color: #555;
-      line-height: 1.5;
-    }
-
-    footer {
-      text-align: center;
-      color: #9aa1ad;
-      padding: 30px;
-    }
-
-    @media(max-width:600px) {
-      h1 {
-        font-size: 38px;
-      }
-
-      .card {
-        margin: 10px 15px 60px;
-        padding: 30px 22px;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-<header>
-  <div class="logo">Swift<span>OTP</span></div>
-  <div class="badge">India • Verification</div>
-</header>
-
-<section class="hero">
-  <small>SMS VERIFICATION PLATFORM</small>
-  <h1>Fast, secure OTP verification.</h1>
-  <p>Authorized transactional SMS verification.</p>
-</section>
-
-<div class="card">
-  <h2>Request verification</h2>
-
-  <label for="mobile">Indian mobile number</label>
-
-  <input
-    id="mobile"
-    type="tel"
-    maxlength="10"
-    placeholder="Enter 10 digit mobile number"
-  >
-
-  <button id="sendOtp">Send OTP</button>
-
-  <div class="note">
-    Use only numbers you own or have permission to verify.
-  </div>
-</div>
-
-<footer>
-  SwiftOTP • Authorized verification only
-</footer>
-
 <script>
 var configuration = {
   widgetId: "366871745777353932383132",
-
-  /*
-   * अपना नया MSG91 token यहाँ डालना है।
-   * पुराना token यहाँ दोबारा इस्तेमाल मत करना।
-   */
   tokenAuth: "561651TrwVu82eN76a8379b5P1",
-
   exposeMethods: true,
 
   success: function(data) {
-    console.log("OTP verification successful", data);
+    console.log("Success:", data);
   },
 
   failure: function(error) {
-    console.log("OTP verification failed", error);
+    console.log("Failure:", error);
+    alert("OTP error: " + JSON.stringify(error));
   }
 };
 
-(function loadOtpScript(urls) {
-  let i = 0;
+var otpReady = false;
 
-  function attempt() {
-    const s = document.createElement("script");
+var script = document.createElement("script");
+script.src = "https://verify.msg91.com/otp-provider.js";
+script.onload = function() {
+  if (typeof window.initSendOTP === "function") {
+    window.initSendOTP(configuration);
+    otpReady = true;
+    console.log("OTP Widget Ready");
+  }
+};
+script.onerror = function() {
+  alert("OTP service load nahi hui.");
+};
+document.head.appendChild(script);
 
-    s.src = urls[i];
-    s.async = true;
+document.getElementById("sendOtp").addEventListener("click", function() {
+  var number = document.getElementById("mobile").value.trim();
 
-    s.onload = function() {
-      if (typeof window.initSendOTP === "function") {
-        window.initSendOTP(configuration);
-      }
-    };
-
-    s.onerror = function() {
-      i++;
-
-      if (i < urls.length) {
-        attempt();
-      }
-    };
-
-    document.head.appendChild(s);
+  if (!/^[6-9]\d{9}$/.test(number)) {
+    alert("10 digit valid Indian mobile number डालें.");
+    return;
   }
 
-  attempt();
+  if (!otpReady || typeof window.sendOtp !== "function") {
+    alert("OTP service abhi ready nahi hai. Page refresh karke dobara try karein.");
+    return;
+  }
 
-})([
-  "https://verify.msg91.com/otp-provider.js",
-  "https://verify.phone91.com/otp-provider.js"
-]);
+  // MSG91 identifier country code ke bina leta hai
+  var identifier = "91" + number;
+
+  window.sendOtp(
+    identifier,
+    function(data) {
+      alert("OTP भेज दिया गया है.");
+      console.log("OTP sent:", data);
+    },
+    function(error) {
+      alert("OTP भेजने में समस्या: " + JSON.stringify(error));
+      console.log("OTP error:", error);
+    }
+  );
+});
 </script>
-
-</body>
-  </html>
